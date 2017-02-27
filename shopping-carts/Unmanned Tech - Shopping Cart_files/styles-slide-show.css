@@ -1,0 +1,153 @@
+/* this file provides theme-specific styles that affect the carousel
+*
+* these changes have been placed in a separate file because they are included
+* in the control panel when the carousel is being previewed
+*
+* they cannot be included in slide-show.css because that is compiled
+* automatically from slide-show.scss */
+
+/* fixes incorrect width created by the `slide' transition in the admin preview
+* modal */
+.slide-show-render.slide-show {
+    width: 100%;
+    max-width: 97.6% !important;
+    /* min-width: 97.6% !important;     */
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    margin: 12px 0 !important;
+    padding: 1% !important;
+}
+.slide-show-render .slides {
+    
+}
+.slide-show-render .slides li {
+    
+    border: solid 0px !important;
+}
+
+.slide-show-render-full .slide-content {
+    /* width: 968px; */
+}
+
+
+.slide-show-render-full .slide-overlay {
+    top: 50px;
+    left: 55px;
+    width: 350px;
+}
+.slide-show-render-full .slide-heading {
+    font-size: 40px;
+    line-height: 45px !important;
+    min-width: 300px;
+    font-family: 'Open Sans', sans-serif;    
+    font-weight: 700;
+    font-style: normal;
+    text-shadow: none;
+    padding: 0;
+    color: #fff;
+    margin: 10px 0 12px 0;
+}
+.slide-show-render-full .slide-text {
+    margin-bottom: 25px;
+    font: normal normal 16px/24px 'Open Sans', sans-serif;    
+    color: #fff;
+    text-transform: none;
+}
+.slide-show-render .slide-button span {
+    font-family:'Open Sans', sans-serif;    
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: normal;
+    background:  #ea3737;
+    padding: 1px 12px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    text-shadow: none;
+    font-size: 18px;
+    line-height: 30px;
+    text-transform: uppercase;
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    
+}
+.flex-direction-nav a, #Nrev {
+    background: url(../images/prev.jpg) no-repeat !important;
+    height: 52px !important;
+    margin: -25px 0 0 !important;
+    width: 51px !important;
+    opacity: 0 !important;
+    filter: alpha(opacity = 0) !important;
+}
+.flexslider:hover .flex-direction-nav a {
+    opacity: 1 !important;
+    filter: alpha(opacity = 100) !important;    
+}
+
+.flex-direction-nav a.flex-prev {
+    left: 10px !important;
+}
+.flex-direction-nav a.flex-next, #Next {
+    background: url(../images/next.jpg) no-repeat 100% 0 !important;
+    right: 10px !important;
+}
+.flex-control-paging {
+    bottom: 50px !important;
+    left: 60px !important;
+    position: absolute;
+    width: auto !important;
+    
+    
+}
+.flex-control-paging li {
+    display: block !important;
+    float: left !important;
+    margin: 0 5px 0 0 !important;
+}
+.flex-control-paging li a {
+    background:  #333!important;
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+    height: 12px !important;
+    width: 12px !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.flex-control-paging li a.flex-active {
+    background: #ea3737 !important;
+}
+
+/* .slider-item { margin:0 24px 0 0 !important;} */
+.slider-item { margin:0 10px 0 0 !important;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
