@@ -1,0 +1,14 @@
+000, Throttle, 5 Bits
+001, Yaw, 5 Bits
+010, Pitch, 5 Bits
+011, Roll, 5 Bits
+
+1000, linXacc, 4 bits
+1001, linYacc, 4 bits
+1010, linZacc, 4 bits
+1011, angXacc, 4 bits
+1100, angYacc, 4 bits
+1101, angZacc, 4 bits
+
+1110, Started Flying, Pruned
+1111, Stopped Flying, Pruned
