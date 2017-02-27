@@ -1,3 +1,5 @@
+Symbol, Variable, Length
+
 000, Throttle, 5 Bits
 001, Yaw, 5 Bits
 010, Pitch, 5 Bits
