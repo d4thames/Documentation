@@ -23,8 +23,17 @@ void USART1_Init( unsigned int baud )
 	UCSRnC = (1<<USBSn)|(3<<UCSZn0);
 }
 
+ISR(USART0_RX){
+	UDR0 = UDR1;
+}
+
+ISR(USART1_RX){
+	UDR0 = UDR1;
+}
+
 int main(void)
 {
 	USART0_Init();
 	USART1_Init();
+	sei();
 }
