@@ -1,0 +1,98 @@
+MPU-9250 Datasheet Summary
+---------------------------
+
+## MODULES
+
+Gyroscope: 	• Three-axis
+			      • 16-bit ADCs and signal conditioning
+			      • ±250dps - ±2000dps 
+			      • Sample rate programmable 3.9 - 8,000 samples/sec
+
+Accelerometer:	• Three-axis
+				        • 16-bit ADCs and signal conditioning	
+				        • When flat 0g on X-Y-axes +1g on Z-axis
+				        • Adjustable range: ±2g - ±16g (powers of 2)
+
+Magnetometer:	• Three-axis	
+				      • 16-bit ADCs and signal conditioning
+				      • ±4800µT
+
+Digital Motion Processor (DMP):	• Offloads Computation from host
+								                • Processes the data from sensors
+								                • Data can be read from reg and buffered FIFO
+								                • Access to an external pin (12) (interrupts)
+
+( 3X16 + 3X16 = 96 bytes of measurements  for 3-axis accel & gyro )
+
+## SELF TEST
+
+Testing of the mechanical and electrical portions of the sensors
+Can be activated the gyroscope and accelerometer self-test registers (13 - 16)
+
+
+## CLOCKING
+
+Sources for generating an internal clock :	• Internal relaxation Oscillator
+											                      • Any of the gyros ( ±1% over temperature but more accurate )
+
+
+"Clock accuracy is important, since timing errors directly affect the distance and angle calculations performed by the Digital Motion Processor (and by extension, by any processor).
+There are also start-up conditions to consider. When the MPU-9250 first starts up, the device uses its internal clock until programmed to operate from another source. This allows the user, for example, to wait for the MEMS oscillators to stabilize before they are selected as the clock source."
+
+
+## SENSOR DATA REGISTERS
+
+• Contain latest measurement data for each module
+• Read-only
+• Serial access
+• Can be accessed anytime
+
+
+## FIFO
+
+• 512byte register (32 measurements)
+• Serial Access
+• FIFO config REG determines which data in FIFO
+  Possible choices:	- Gyro
+  					- Accel
+  					- Temp
+  					- Aux sensors
+  					- FSYNC input
+• FIFO counter tracks valid data 
+• FIFO REG supports burst reads
+• Interrupt
+
+
+## INTERRUPTS
+
+Configurable Items: • INT pin config
+					          • Interrupt latching and clearing method
+					          • Triggers for the interrupt
+
+Possible Triggers:	• Clk generator locked to new reference osc (switching clock sources)
+					          • New data in FIFO and Data REG
+					          • Accelerometer event
+					          • ACK not received from aux sensor
+
+
+## SPI
+
+• MSB first
+• Data latched @posedge SCLK
+• Should be transitioned @negedge
+• SCLK Max Frequency: 1MHz
+• Supports single or burst R/W
+• R/W >= 16 clk cycles (2 or more bytes)
+
+     Address Format					    Data Format
+
+  MSB			        LSB           MSB       LSB
+| R/W | A6 | .. | A0 |			  | D7 | .. | D0 |
+
+
+######### DATASHEETS #########
+
+• Product Specification: 			https://goo.gl/qcMBFf
+• Register Map and Descriptions:	https://goo.gl/g3mqui
+
+
