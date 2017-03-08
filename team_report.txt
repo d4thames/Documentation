@@ -1,0 +1,23 @@
+Aim:
+X-frame
+Weight: 500g, thrust: 1600g, payload 1kg/500g
+Flight time: 3 minutes
+Lipo battery
+On-the-fly control tuning via Bluetooth
+
+Challenges:
+Flight, stability, telemetry
+
+Aims:
+The aim of this project was to build an aerial cargo transporter, with the idea being that a company like Amazon could use the transporter to send packages to customers very quickly and reliably, with a minimisation on the cost of delivery. To make this possible, a quadcopter design was chosen. This design was selected to overcome one of the biggest challenges of the project – maintaining stability when in flight. One of the requirements for the systems was to have telemetry of parameters such as height, pitch etc. This is advantageous, especially if the telemetry is broadcasted live, because the telemetry can be used for diagnostics either in the event of a crash or if the drone is not behaving as expected.
+Most drones adopt one of two chassis styles – the X-frame and the H-frame. For this project, the X-frame was chosen for its greater stability. The trade-off was that the H-frame is easier to manufacture and build, and is generally stronger. For additional stability, attempts were made to reduce both the weight of the drone, and the distance of the drones centre of mass from the base of the chassis.
+The target weight of the drone was 0.5kg, which in combination with an expected thrust of 1.6kg, gives about 1.1kg as a maximum payload. Taking this into account, the recommended maximum payload is 0.5kg, as the drone should be able to lift this weight without putting excessive strain on the motors and speed controllers. Putting this strain on the drive system leads to high temperatures which can permanently affect their efficiency, and can even degrade their mountings.
+Another important specification is the flight time of the drone. This depends on the load that drone is carrying, because increasing the load increases the thrust required for flight, which in turn increases the current draw of the motors and speed controllers. A lithium polymer battery was chosen for powering the drone because lipos give a constant voltage for a long time; the only risk is that lipos catch fire if charged incorrectly.
+For the control aspect of the design, the telemetry was identified as an area where a “stretch-goal” could be attempted. In this case, it was decided that a Bluetooth link should be used. This link could potentially allow the user to see live data from the drone whilst in flight. Additionally, it could allow the user to make adjustments to the handling of the drone by tuning PID constants. If it works correctly, the procedure would be as simple as landing the drone, change the numbers and fly it again straight after, with the changed values taking immediate effect.
+System Design:
+Block diagram, explain each bit
+Design was based on what we needed, then break down blocks
+<insert block diagram>
+The block diagram for the project is shown above. The controller is central to the design, as it takes inputs from the IMU, Bluetooth serial and remote controlled receiver, and converts this information into a PWM output for the speed controllers. The control is done by an ATmega664p from the Il Matto boards that were developed in first year laboratories. The function of the controller, besides converting its inputs into an output, is to change the interpretation of the signals from the receiver in such a way the drone is easier to fly. The control is based on damping, with the code for the controller allowing for the PID constants to be easily adjusted by the user.
+The IMU decoder is also very important to the design, as it takes the Bluetooth, IMU and PPM data from the receiver, and gives an output to the controller using UART communication. The information from the IMU allows the controller to know its pitch, roll etc. so that it can adjust the thrust to the propellers to stabilise the drone. Taking the output of the PPM decoder also allows the IMU decoder to factor in the inputs from the pilot when calculating its output. The decoder also transmits the telemetry data from the IMU to the host using Bluetooth, which provides a data log for the user.
+
