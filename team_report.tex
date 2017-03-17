@@ -1,0 +1,97 @@
+\documentclass[a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+
+\title{\textbf{D4} Team Report}
+\author{Team Thames}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\pagebreak
+
+\section{Aims}
+
+The aim of this project was to build an aerial cargo transporter, with the idea being that a company like Amazon could use the transporter to send packages to customers very quickly and reliably, with a minimisation on the cost of delivery. To make this possible, a quadcopter design was chosen. This design was selected to overcome one of the biggest challenges of the project – maintaining stability when in flight. One of the requirements for the systems was to have telemetry of parameters such as height, pitch etc. This is advantageous, especially if the telemetry is broadcasted live, because the telemetry can be used for diagnostics either in the event of a crash or if the drone is not behaving as expected.
+
+Most drones adopt one of two chassis styles – the X-frame and the H-frame. For this project, the X-frame was chosen for its greater stability. The trade-off was that the H-frame is easier to manufacture and build, and is generally stronger. For additional stability, attempts were made to reduce both the weight of the drone, and the distance of the drones centre of mass from the base of the chassis.
+
+The target weight of the drone was 0.5kg, which in combination with an expected thrust of 1.6kg, gives about 1.1kg as a maximum payload. Taking this into account, the recommended maximum payload is 0.5kg, as the drone should be able to lift this weight without putting excessive strain on the motors and speed controllers. Putting this strain on the drive system leads to high temperatures which can permanently affect their efficiency, and can even degrade their mountings.
+
+Another important specification is the flight time of the drone. This depends on the load that drone is carrying, because increasing the load increases the thrust required for flight, which in turn increases the current draw of the motors and speed controllers. A lithium polymer battery was chosen for powering the drone because lipos give a constant voltage for a long time; the only risk is that lipos catch fire if charged incorrectly.
+
+For the control aspect of the design, the telemetry was identified as an area where a “stretch-goal” could be attempted. In this case, it was decided that a Bluetooth link should be used. This link could potentially allow the user to see live data from the drone whilst in flight. Additionally, it could allow the user to make adjustments to the handling of the drone by tuning PID constants. If it works correctly, the procedure would be as simple as landing the drone, change the numbers and fly it again straight after, with the changed values taking immediate effect.
+
+\section{System Design}
+
+The block diagram for the project is in \textbf{Appendix C}. The controller is central to the design, as it takes inputs from the IMU, Bluetooth serial and remote controlled receiver, and converts this information into a PWM output for the speed controllers. The control is done by an ATmega664p from the Il Matto boards that were developed in first year laboratories. The function of the controller, besides converting its inputs into an output, is to change the interpretation of the signals from the receiver in such a way the drone is easier to fly. The control is based on damping, with the code for the controller allowing for the PID constants to be easily adjusted by the user.
+
+The IMU decoder is also very important to the design, as it takes the Bluetooth, IMU and PPM data from the receiver, and gives an output to the controller using UART communication. The information from the IMU allows the controller to know its pitch, roll etc. so that it can adjust the thrust to the propellers to stabilise the drone. Taking the output of the PPM decoder also allows the IMU decoder to factor in the inputs from the pilot when calculating its output. The decoder also transmits the telemetry data from the IMU to the host using Bluetooth, which provides a data log for the user.
+
+The PPM to Digital conversion is important for the implementation of the transmitter and receiver, as the output of the receiver needs to be decoded for the pilot’s input to be processed. The receiver’s output can either be processed as PWM or PPM; the latter was chosen here because it only required one output, although the data can only be processed at a quarter of the rate of the PWM outputs. However, the PWM requires 4 outputs/inputs to work. The PPM decoder, along with the controller and IMU decoder, are central to the design.
+
+To get the drone off the ground, the drive module is needed. This consists of electronic speed controllers, motors, propellers and power distribution board. The speed controllers receive a PWM signal from the controller, which they convert into a three phase output for the motor. The speed controllers are very basic and have no intelligent control aspect to them. The power distribution board provides a suitable continuous voltage and helps to reduce the temperature of various other parts.
+
+Last of the modules is the Bluetooth communications module. This is designed to allow live data logging from the drone, and allows the user to change damping constants and motor thrusts whilst in use. This tuning data is sent to the IMU decoder using a UART communication, where it is then fed to the controller.
+
+This architecture was developed based on what external components were needed, such as speed controllers and the receiver. Initially, the control section was seen as a black box, where inputs from the receiver and IMU would go in, be processed and outputted via the speed controllers. As the project developed and after researching chips, the control split into the PPM to digital conversion, IMU decoder, and the central controller. The way in which the system is designed means that no other system architectures were considered.
+
+\section{Design Evaluation}
+
+Overall, the design was relatively simple, with a single stretch goal. This is because it was agreed that it would be better to get something simple that works rather than be too ambitious and fail to get anything working. Even as it is, the difficulty is quite high due to the amount of communication that is present between the various modules. There is, however, scope to attempt other stretch goals; an audio feature would be the easiest to implement, although some sound would be lost due to the propellers.
+
+In this project, it was important to have a good quality of electronic design, as the task is inherently difficult. Breaking the design into modules was very important, because it made it easier to allocate work, but also because it makes it easy to see how all of the modules interact. The design was also based on existing products, which makes debugging easier, because in the event of a module not working it is more likely to mean these products are being used incorrectly.
+
+An important specification when making a product is the ease of use, because there is not much point in making a new product if it is too difficult to use. In the context of aircrafts, the best way to make the system easy to use is to reduce the start up procedure so that the user is able to pick up the drone and fly it straight away. If this is not achievable, the next best thing is to have such a small procedure that the instructions can be put onto the drone itself so that the instruction manual does not have to read for the drone to be used.
+
+For this type of project, there are a lot of existing solutions and products already available. This means that it is difficult to be creative, because there is a good chance that a design already exists, or if it doesn’t exist then it probably means it has failed to make a difference. For example, the chassis frame was chosen to be in the shape of an “X-frame”. This is a common shape for quadcopter frames, along with the “H-frame”; many other frames have been tried and tested and most failed to keep the drone stable. As such, there is very little on this quadcopter that has never been seen before on other products.
+
+On a similar note to the above, the aesthetics are a low priority as well. It was seen as preferable to get a working drone than to make an aesthetically pleasing drone. However, if there is sufficient time at the end of the project, efforts will be made to make the aircraft easy on the eye. If this were to become an actual product, the aesthetics would be designed when the product works in order to make it more marketable.
+
+It is expected that the drone will not cost much, with a price tag of £150 (not including VAT) giving an estimated £60 profit per unit sold. The cost is kept down by cutting costs on non-critical components such as propellers, whilst using decent quality parts for critical modules such as the motors. The cost of each unit would be £90, but reduction of costs in mass production would lower this value.
+
+Reliability is important for all products and is often enhanced by thorough testing, and acting on the feedback received from the tests. The drone was split into separate, testable modules that could be put together. This meant that each module could tested thoroughly, resulting in a more reliable design.
+
+\section{Costing, Marketing and Conformance Testing}
+
+If this product were to actually be sold commercially, calculations would need to be made relating to how much was spent on the development of the product. For this, person-hours, conformance testing, and overheads should be considered. The overheads are estimated at £100,000 to pay for facilities for design, manufacturing, and testing; this makes up the majority of the cost. The person-hours are also expensive – with an hourly rate of £75, and an estimated 450 hours spent on the design of the prototype, this equates to an additional £33750.
+
+The cost of the prototype’s components was £98, but with mass production we expect each unit will cost £70. This means that if each unit is sold for £150 plus VAT, the profit will be £80 per unit, meaning that 1720 number of units will need to be sold to cover the cost of the project.
+
+In order to get an awareness of the product, there will need to be marketing exercises. These primarily consist of branding and early release discounts. A possible early discount would be to sell the first 20 units at half profit, so that an extra 20 units would need to be sold to cover the costs. Additionally, the product would need a website, branding and a logo. The logo could be designed in house for no additional cost, although it is a better idea to go to a professional graphic design agency. The logo alone would cost an estimated £250, with the branding costing somewhere in the region of £1000 and the website design costing another £500 as well (1).
+
+Another way of getting market awareness is to sell the drones to large distributors at a bulk discount, so that can sell the units for a sensible profit. This would reduce profit per unit, but would increase the quantity of sales, which is another way to make profit. If units were sold at £110 plus VAT this would mean that 3440 units would need to be sold to cover the initial outlay. Given that it is unlikely that a distributor would buy many of a new product, as it would be a gamble for them; it is possible that a moderate number of units can be sold to multiple distributors.
+
+For the product to be sold, it needs to pass conformance testing. Conformance testing is a standardised set of tests that determine whether a product is safe for reasonable conditions. In the context of electronic products, this will consist of exposing the casing to substances that are typically found in the house, such as water. They will also be tested with radiation (both exposure to radiation, and having their radiation output measured) and changes of voltage to simulate events like voltage spikes from motors. If all of these are passed, the product can then have a CE sticker put on it, which tells customers that the product is safe to use. This process costs approximately £2000.
+
+Factoring in all of the above, the cost of getting the product off the ground would now be £137,500. With the same price tag of £150 plus VAT, the number of sales required for a profit would be 1720. If 2000 units were sold to a large distributor at a price of £110 plus VAT, the number of units would reduce to 720.
+
+
+\section{Final Product}
+
+Overall, the product did not work as well as expected. The drone was able to fly, but with very limited control. The PID control worked to some extent, meaning that each of the motors would adjust its thrust in response to changes of roll and pitch. Unfortunately, the process through which it did this was unable to give a smooth response, which would have resulted in the drone being very difficult to control. As such, our product did not meet the specifications of carrying weight or stable flight. With more time for development, it is reasonable to expect that the product would have operated as a quadcopter; the weight carrying aspect would require a lot more work than stable flight.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{drone.eps}
+  \caption{An image of the drone at submission with the electronics on the protoboard.}
+\end{figure}
+
+The battery powers the power distribution board, which provides an 11V output to each of the ESCs, which in turn power the motors. It also has a 3.3V regulator that powers everything else. The speed controllers take their input from the PID controller. The PID controller is the main brains of the system, taking inputs from the communications, and the Motion Processor Unit. The output of the MPU is filtered by the Arduino Mini, which sends the data to the PID controller in a UART format. The MPU is a 3 axis gyro that gives information on the roll and pitch of the drone at any point. It also has a magnetometer which allows it to output information relating to the yaw of the drone. The Bluetooth module transmits thrust, yaw, roll and pitch inputs from the pilot, so that the controller can change the output based on these inputs. In addition to this, the controller will attempt to maintain the drone with all four propellers being level, and any inputs from the user will be slightly counteracted by the controller. There is also a hook on the underside of the chassis, which consists of four ends of string attached to each corner of the chassis. The string are twined together for increased strength. There is a hook on the ends of the string.
+
+If the drone were to be sold commercially, extension tasks would have been attempted to make the product more marketable and to give the customer better value for money. A good example of an extension would be to have live video streaming from the drone when in flight. This would allow the pilot to see the drone if it went out of eyeshot, or behind a behind a building for example. If this video was uploaded to the internet through a live stream, it would allow customers to see the progress of their delivery drone as it transports their order to them. Including a live internet stream would be quite difficult, but having a live video from the drone is a very achievable extension.
+
+Another worthwhile extension would be to make the drone autonomous or at least semi autonomous. Full autonomy would require a lot of work on the control module, whereas semi autonomy would be more achievable. Semi autonomy would mean the drone would take off and/or land itself no control needed from the user. The take off would be easier than landing, because the take off could be programmed to give even thrust for a period of time so that the drone goes straight up. Landing would require the drone to know the area where it’s landing, which would require more sensors, each attached to the underside so that the landing area could be profiled.
+
+An easier extension would be to have a distinctive lighting pattern. This would be useful for flying in the dark, both for allowing the drone to see and for the drone to be seen. Ultimately the lighting could just be LEDs of different colours forming differing patterns. This would be good if there was a small quantity of drones, whereas trying to uniquely identify thousands of drones would be much more difficult and would probably involve a unique code for each drone.
+
+These extensions would be enough to give the product its own niche in the market, and each one would be achievable with more time and money. Of course, the first priority would be to make the drone work properly; the additional features would then follow on from that.
+
+(1)	2B Designer. Available: http://www.graphicdesigner2b.co.uk/prices/ Last accessed 14th March 2017.
+
+\end{document}
